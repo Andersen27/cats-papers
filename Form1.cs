@@ -171,22 +171,22 @@ namespace Cats_papers {
                     if (array[source][3] != "") {
                         switch (array[source][3].ToLower()) {
                             case "москва":
-                                result += ".– М.";
+                                result += ". – М.";
                                 break;
                             case "санкт-петербург":
-                                result += ".– СПб.";
+                                result += ". – СПб.";
                                 break;
                             case "ленинград":
-                                result += ".– Л.";
+                                result += ". – Л.";
                                 break;
                             case "ростов на дону":
-                                result += ".– Р. н/Д.";
+                                result += ". – Р. н/Д.";
                                 break;
                             case "нижний новгород":
-                                result += ".– Н. Новгород";
+                                result += ". – Н. Новгород";
                                 break;
                             default:
-                                result += ".– " + array[source][3];
+                                result += ". – " + array[source][3];
                                 break;
                         }
                         if (array[source][2] != "") {
@@ -279,7 +279,8 @@ namespace Cats_papers {
                ((name.Length == 10 && name[9] == '2') || (name.Length == 11 && name[10] == '2')) || 
                ((autor.Length < 4 || autor.Length > 3 && autor.Substring(0, 4).ToLower() != "http") &&
                ((name.Length == 10 && name[9] == '6') || (name.Length == 11 && name[10] == '6')))) ||
-                (autor.Length > 0 && autor[autor.Length - 1] == '.')) {
+                (((name.Length == 10 && name[9] == '1') || (name.Length == 11 && name[10] == '1')) && 
+                autor.Length > 0 && autor[autor.Length - 1] == '.')) {
                     //Если важное поле не заполнено или формат записи автора неверный - окрасить поле в розовый
                     (sender as TextBox).BackColor = System.Drawing.Color.Pink;
             }
@@ -293,9 +294,18 @@ namespace Cats_papers {
             //Копирование текста (Контекстное меню)
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             ContextMenuStrip menu = (ContextMenuStrip)item.Owner;
-            TextBox text_box = (TextBox)menu.SourceControl;
-            if (text_box.SelectedText != "")
-                Clipboard.SetText(text_box.SelectedText);
+            if (menu.SourceControl.GetType() == typeof(TextBox)) {
+                TextBox text_box = (TextBox)menu.SourceControl;
+                if (text_box.SelectedText != "") {
+                    Clipboard.SetText(text_box.SelectedText);
+                }
+            }
+            else {
+                RichTextBox text_box = (RichTextBox)menu.SourceControl;
+                if (text_box.SelectedText != "") {
+                    Clipboard.SetText(text_box.SelectedText);
+                }
+            }
         }
 
 
